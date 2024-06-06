@@ -1,0 +1,42 @@
+<h1>Listing Uploads</h1>
+<%= form_for @conn, "/uploads", [as: :upload, multipart: true], fn f -> %>
+
+  <div class="form-group">
+    <label>Document</label>
+    <%= file_input f, :docfile, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+<table>
+  <thead>
+    <tr>
+      <th>Filename</th>
+      <th>Size</th>
+      <th>Content type</th>
+      <th>Hash</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for upload <- @uploads do %>
+    <tr>
+      <td><%= upload.filename %></td>
+      <td><%= upload.size %></td>
+      <td><%= upload.content_type %></td>
+      <td><%= upload.hash %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.upload_path(@conn, :show, upload) %></span>
+        <span><%= link "Edit", to: Routes.upload_path(@conn, :edit, upload) %></span>
+        <span><%= link "Delete", to: Routes.upload_path(@conn, :delete, upload), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Upload", to: Routes.upload_path(@conn, :new) %></span>
